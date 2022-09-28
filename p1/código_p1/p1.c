@@ -40,7 +40,7 @@ int main(int argc, char *argv[]) {
                                         compute_zcr(x, N, fm));
         trm += 1;
     }
-    fprintf("%f",fm);
+    
     cierra_wave(fpWave);
     free(buffer);
     free(x);
