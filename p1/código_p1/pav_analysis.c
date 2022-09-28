@@ -14,6 +14,7 @@ float compute_am(const float *x, unsigned int N) {
     float res=0;
     for(int i = 0 ;i < N;i++)
     	res += (float) fabs(x[i]);
+        
     return res/N;
 }
 
