@@ -5,7 +5,7 @@ FILE    *abre_wave(const char *ficWave, float *fm) {
     FILE    *fpWave;
     int fmi; //para leer los 4 bytes (int) de frecuencia
 
-    if (fpWave == fopen(ficWave, "r") == NULL) return NULL;
+    if ((fpWave = fopen(ficWave, "r")) == NULL) return NULL;
     
     //lectura frecuencia
     if (fseek(fpWave, 24, SEEK_SET) < 0) return NULL;
