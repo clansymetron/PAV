@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include "fic_wave.h"
 
-FILE    *abre_wave(const char *ficWave, float *fm, int *mod, short *channel) {
+FILE    *abre_wave(const char *ficWave, float *fm, int *mod, short *channel, int *muestras) {
     FILE    *fpWave;
     int fmi; //para leer los 4 bytes (int) de frecuencia
     short PCM;
@@ -21,6 +21,9 @@ FILE    *abre_wave(const char *ficWave, float *fm, int *mod, short *channel) {
     //lectura frecuencia
     if (fseek(fpWave, 24, SEEK_SET) < 0) return NULL;
     fread(&fmi, 4, 1 , fpWave);
+
+    if (fseek(fpWave, 40, SEEK_SET) < 0) return NULL;
+    fread(muestras, 4, 1 , fpWave);
 
     //posicionamiento en 44 byte para empezar a leer datos
     if (fseek(fpWave, 44, SEEK_SET) < 0) return NULL;
