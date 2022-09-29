@@ -4,7 +4,7 @@
 FILE    *abre_wave(const char *ficWave, float *fm, int *mod, short *channel, int *muestras) {
     FILE    *fpWave;
     int fmi; //para leer los 4 bytes (int) de frecuencia
-    short PCM;
+    short PCM; //leer si es PCM son 2 bytes (short en c) igual que el canal
     if ((fpWave = fopen(ficWave, "r")) == NULL) return NULL;
     
     //modulation
