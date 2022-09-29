@@ -12,6 +12,8 @@ int main(int argc, char *argv[]) {
     int   trm;
     float *x;
     short *buffer;
+    int mod;
+    short channel;
     FILE  *fpWave;
     FILE  *fpResult;
     FILE  *stdout_P1 = stdout;
@@ -21,7 +23,7 @@ int main(int argc, char *argv[]) {
         return -1;
     }
 
-    if ((fpWave = abre_wave(argv[1], &fm)) == NULL) {
+    if ((fpWave = abre_wave(argv[1], &fm, &mod, &channel)) == NULL) {
         fprintf(stderr, "Error al abrir el fichero WAVE de entrada %s (%s)\n", argv[1], strerror(errno));
         return -1;
     }
@@ -49,7 +51,10 @@ int main(int argc, char *argv[]) {
                                         compute_zcr(x, N, fm));
         trm += 1;
     }
-    fprintf(stdout_P1, "FM = %.2f Hz",fm);
+    fprintf(stdout_P1, "FM = %.2f Hz, ",fm);
+    fprintf(stdout_P1, "mod= %d PCM, ",mod);
+    fprintf(stdout_P1, "channel= %d (mono)",channel);
+
     cierra_wave(fpWave);
     free(buffer);
     free(x);
