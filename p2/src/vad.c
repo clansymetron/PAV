@@ -42,7 +42,8 @@ Features compute_features(const float *x, int N) {
    * For the moment, compute random value between 0 and 1 
    */
   Features feat;
-  feat.zcr = feat.p = feat.am = (float) rand()/RAND_MAX;
+  feat.p=compute_power(x,N);
+  feat.zcr = feat.am = (float) rand()/RAND_MAX;
   return feat;
 }
 
