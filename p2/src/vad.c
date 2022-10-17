@@ -3,6 +3,7 @@
 #include <stdio.h>
 
 #include "vad.h"
+#include "pav_analysis.h"
 
 const float FRAME_TIME = 10.0F; /* in ms. */
 
@@ -42,7 +43,7 @@ Features compute_features(const float *x, int N) {
    * For the moment, compute random value between 0 and 1 
    */
   Features feat;
-  feat.p=compute_power(x,N);
+  /*feat.p=compute_power(x,N);*/
   feat.zcr = feat.am = (float) rand()/RAND_MAX;
   return feat;
 }

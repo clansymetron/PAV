@@ -2,6 +2,7 @@
 #define _VAD_H
 #include <stdio.h>
 
+
 /* TODO: add the needed states */
 typedef enum {ST_UNDEF=0, ST_SILENCE, ST_VOICE, ST_INIT} VAD_STATE;
 
