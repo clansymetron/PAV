@@ -22,6 +22,7 @@ typedef struct {
     /* special */
     const char *usage_pattern;
     const char *help_message;
+    char *alfa1;
 } DocoptArgs;
 
 const char help_message[] =
