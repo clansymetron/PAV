@@ -105,7 +105,7 @@ VAD_STATE vad(VAD_DATA *vad_data, float *x) {
       vad_data->state = ST_MYB_SILENCE;
     break;
 
-    case ST_MYB_SILENCE:
+    case ST_MYB_SILENCE: //cruces por cero
         if(f.p < vad_data->umbral){
           if(time_passed>0.25){
              vad_data->state = ST_SILENCE;
