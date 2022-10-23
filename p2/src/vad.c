@@ -14,7 +14,7 @@ const float FRAME_TIME = 10.0F; /* in ms. */
  */
 
 const char *state_str[] = {
-  "UNDEF", "S", "V", "INIT"
+  "UNDEF", "S", "V", "INIT", "MYBS", "MYBV"
 };
 
 const char *state2str(VAD_STATE st) {
@@ -37,14 +37,11 @@ Features compute_features(const float *x, int N) {
    * Input: x[i] : i=0 .... N-1 
    * Ouput: computed features
    */
-  /* 
-   * DELETE and include a call to your own functions
-   *
-   * For the moment, compute random value between 0 and 1 
-   */
+ 
   Features feat;
-  /*feat.p=compute_power(x,N);*/
-  feat.zcr = feat.am = (float) rand()/RAND_MAX;
+  feat.p=compute_power(x,N);
+  feat.zcr = compute_zcr(x, N,16000);
+  feat.am = compute_am(x, N);
   return feat;
 }
 
@@ -92,19 +89,28 @@ VAD_STATE vad(VAD_DATA *vad_data, float *x) {
 
   switch (vad_data->state) {
   case ST_INIT:
+    vad_data->umbral = vad_data->last_feature + vad_data->alpha1;
     vad_data->state = ST_SILENCE;
     break;
 
   case ST_SILENCE:
-    if (f.p > 0.95)
-      vad_data->state = ST_VOICE;
+    if (f.p > vad_data->umbral)
+      vad_data->state = ST_MYB_VOICE;
     break;
 
   case ST_VOICE:
-    if (f.p < 0.01)
-      vad_data->state = ST_SILENCE;
+    if (f.p < vad_data->umbral)
+      vad_data->state = ST_MYB_SILENCE;
     break;
 
+
+
+
+
+
+
+
+    
   case ST_UNDEF:
     break;
   }
