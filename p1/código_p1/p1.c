@@ -36,6 +36,7 @@ int main(int argc, char *argv[]) {
     } 
 
     N = durTrm * fm;
+    fprintf(stdout, "%d",N);
     if ((buffer = malloc(N * sizeof(*buffer))) == 0 ||
         (x = malloc(N * sizeof(*x))) == 0) {
         fprintf(stderr, "Error al ubicar los vectores (%s)\n", strerror(errno));

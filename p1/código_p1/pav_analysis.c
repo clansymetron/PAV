@@ -5,9 +5,11 @@ float compute_power(const float *x, unsigned int N) {
     float res = 0;
     for(int i = 0;i < N;i++)
     	res += (x[i] * x[i]);
-    
+
+    if (res==0) res = 0.00000001;
+
     return (float) 10*log10(res/N);
-    
+    //Podríamos haber hecho log(1+res/N) pero optamos por esta opción.
 }
 
 float compute_am(const float *x, unsigned int N) {
