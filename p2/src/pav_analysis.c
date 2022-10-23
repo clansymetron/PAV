@@ -1,12 +1,12 @@
 #include <math.h>
 #include "pav_analysis.h"
 
-float compute_power(const float *x, unsigned int N) {
-    float res = 1* exp(-12);
+double compute_power(const float *x, unsigned int N) {
+    double res = 1* exp(-12);
     for(int i = 0;i < N;i++)
     	res += (x[i] * x[i]);
     
-    return (float) 10*log10(res/N);
+    return (double) 10*log10(res/N);
     
 }
 

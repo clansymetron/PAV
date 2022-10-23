@@ -33,8 +33,10 @@ int main(int argc, char *argv[]) {
   input_wav  = args.input_wav;
   output_vad = args.output_vad;
   output_wav = args.output_wav;
-  alfa1 = atof(args.alfa1);
-  alfa1 = atof(args.alfa2);
+  //alfa1 = atof(args.alfa1);
+  //alfa2 = atof(args.alfa2);
+  alfa1= 13;
+  alfa2 = 12;
 
   if (input_wav == 0 || output_vad == 0) {
     fprintf(stderr, "%s\n", args.usage_pattern);
