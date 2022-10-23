@@ -6,7 +6,7 @@
 #include "pav_analysis.h"
 
 const float FRAME_TIME = 10.0F; /* in ms. */
-
+int Nint = 0;
 /* 
  * As the output state is only ST_VOICE, ST_SILENCE, or ST_UNDEF,
  * only this labels are needed. You need to add all labels, in case
@@ -49,13 +49,16 @@ Features compute_features(const float *x, int N) {
  * TODO: Init the values of vad_data
  */
 
-VAD_DATA * vad_open(float rate,float alfa1) {
+VAD_DATA * vad_open(float rate,float alfa1, float alfa2) {
   VAD_DATA *vad_data = malloc(sizeof(VAD_DATA));
   vad_data->state = ST_INIT;
   vad_data->sampling_rate = rate;
   vad_data->frame_length = rate * FRAME_TIME * 1e-3;
   vad_data->alpha1=alfa1;
+  vad_data->alpha2 = alfa2;
   vad_data->maybe_count = 0;
+  vad_data->umbral1 = 0;
+  vad_data->umbral2 =0;
   return vad_data;
 }
 
@@ -90,24 +93,33 @@ VAD_STATE vad(VAD_DATA *vad_data, float *x) {
   float time_passed = FRAME_TIME * 1e-3 * vad_data->maybe_count;
 
   switch (vad_data->state) {
-  case ST_INIT: //Posible cambio : Más de una trama
-    vad_data->umbral = vad_data->last_feature + vad_data->alpha1;
+  case ST_INIT: 
+
+    if(Nint==10){
+    vad_data->umbral1 = 10*log10(1/Nint * vad_data->umbral1) + vad_data->alpha1;
+    vad_data->umbral2 = vad_data->umbral1 + vad_data->alpha2;
     vad_data->state = ST_SILENCE;
+    Nint =0;
+    }
+    else{
+        vad_data->umbral1 += pow(10, f.p/10 );
+      }
+
     break;
 
   case ST_SILENCE:
-    if (f.p > vad_data->umbral)
+    if (f.p > vad_data->umbral1)
       vad_data->state = ST_MYB_VOICE;
     break;
 
   case ST_VOICE:
-    if (f.p < vad_data->umbral)
+    if (f.p < vad_data->umbral2)
       vad_data->state = ST_MYB_SILENCE;
     break;
 
     case ST_MYB_SILENCE: //cruces por cero
-        if(f.p < vad_data->umbral){
-          if(time_passed>0.25){
+        if(f.p < vad_data->umbral2){
+          if(time_passed>0.25 || f.p<vad_data->umbral1){
              vad_data->state = ST_SILENCE;
              vad_data->maybe_count= 0;
           }
@@ -125,8 +137,8 @@ VAD_STATE vad(VAD_DATA *vad_data, float *x) {
     break;
 
     case ST_MYB_VOICE:
-        if(f.p > vad_data->umbral){
-          if(time_passed>0.15){
+        if(f.p > vad_data->umbral1){
+          if(time_passed>0.15 || f.p>vad_data->alpha2){
              vad_data->state = ST_VOICE;
              vad_data->maybe_count= 0;
           }
