@@ -110,11 +110,14 @@ Ejercicios
 
 	* Incremento del nivel potencia en dB, respecto al nivel correspondiente al silencio inicial, para
 	  estar seguros de que un segmento de señal se corresponde con voz.
+	  
+	  Si hay un incremento de 27dB podemos decir que empieza un segemnto de voz.
 
 	* Duración mínima razonable de los segmentos de voz y silencio.
+		Duración mínima del silencio podemos decir que es 0,7s y de voz 1,2s.
 
 	* ¿Es capaz de sacar alguna conclusión a partir de la evolución de la tasa de cruces por cero?
-
+		No.
 
 ### Desarrollo del detector de actividad vocal
 
