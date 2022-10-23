@@ -55,6 +55,7 @@ VAD_DATA * vad_open(float rate,float alfa1) {
   vad_data->sampling_rate = rate;
   vad_data->frame_length = rate * FRAME_TIME * 1e-3;
   vad_data->alpha1=alfa1;
+  vad_data->maybe_count = 0;
   return vad_data;
 }
 
@@ -86,9 +87,10 @@ VAD_STATE vad(VAD_DATA *vad_data, float *x) {
 
   Features f = compute_features(x, vad_data->frame_length);
   vad_data->last_feature = f.p; /* save feature, in case you want to show */
+  float time_passed = FRAME_TIME * 1e-3 * vad_data->maybe_count;
 
   switch (vad_data->state) {
-  case ST_INIT:
+  case ST_INIT: //Posible cambio : Más de una trama
     vad_data->umbral = vad_data->last_feature + vad_data->alpha1;
     vad_data->state = ST_SILENCE;
     break;
@@ -103,20 +105,51 @@ VAD_STATE vad(VAD_DATA *vad_data, float *x) {
       vad_data->state = ST_MYB_SILENCE;
     break;
 
+    case ST_MYB_SILENCE:
+        if(f.p < vad_data->umbral){
+          if(time_passed>0.25){
+             vad_data->state = ST_SILENCE;
+             vad_data->maybe_count= 0;
+          }
+          else {
+            vad_data->maybe_count ++;
+          }
+        }
+        else{
+          vad_data->state = ST_VOICE;
+          vad_data->maybe_count= 0;
+
+        }
 
 
+    break;
+
+    case ST_MYB_VOICE:
+        if(f.p > vad_data->umbral){
+          if(time_passed>0.15){
+             vad_data->state = ST_VOICE;
+             vad_data->maybe_count= 0;
+          }
+          else {
+            vad_data->maybe_count ++;
+          }
+        }
+        else{
+          vad_data->state = ST_SILENCE;
+          vad_data->maybe_count= 0;
+
+        }
 
 
+    break;
 
-
-
-    
   case ST_UNDEF:
     break;
   }
 
   if (vad_data->state == ST_SILENCE ||
-      vad_data->state == ST_VOICE)
+      vad_data->state == ST_VOICE || vad_data->state == ST_MYB_SILENCE ||
+      vad_data->state == ST_MYB_VOICE) 
     return vad_data->state;
   else
     return ST_UNDEF;

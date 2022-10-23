@@ -19,6 +19,7 @@ typedef struct {
   float last_feature; /* for debuggin purposes */
   float umbral;
   float alpha1;
+  int maybe_count;
 } VAD_DATA;
 
 /* Call this function before using VAD: 
