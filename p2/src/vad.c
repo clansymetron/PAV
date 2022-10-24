@@ -123,7 +123,7 @@ VAD_STATE vad(VAD_DATA *vad_data, float *x) {
 
     case ST_MYB_SILENCE: //cruces por cero
         if(f.p < vad_data->umbral2){
-          if(time_passed>0.3 && f.p<vad_data->umbral1){
+          if(time_passed>0.266 || (time_passed>0.204 && f.p<vad_data->umbral1)){
              vad_data->state = ST_SILENCE;
              vad_data->maybe_count= 0;
           }
@@ -142,7 +142,7 @@ VAD_STATE vad(VAD_DATA *vad_data, float *x) {
 
     case ST_MYB_VOICE:
         if(f.p > vad_data->umbral1){
-          if(time_passed>0.14 || f.p>vad_data->alpha2){
+          if((time_passed>0.05 && f.p>vad_data->alpha2) || time_passed >0.08){
              vad_data->state = ST_VOICE;
              vad_data->maybe_count= 0;
           }
