@@ -63,22 +63,6 @@ Once having these, we compute the 3 following audio/statistics caracterization:
 
 **MEAN OF THE SIGNAL'S POWER**
 
-<<<<<<< HEAD
-$P_{dB} = 10 \log_{10} (\dfrac{1}N · \sum_{n = 0}^{N-1 }x²[{n}] )$;
-
-**MEAN OF AMPLITUDE**
-
-$A = \dfrac{1}N \sum_{n=0}^{N-1}|x[n]|   $;
-
-**CROSSES PER ZERO RATE**
-
-$ZCR = \dfrac{fm}2 \dfrac{1}{N-1} \sum_{n=1}^{N-1} \delta(sign(x[n] )\neq sgn(x[n-1]) )$;
-=======
-$P_{dB} = 10 \log_{10} (1/N · \sum_{n=0}^{N-1}x²[{n}] )$
->>>>>>> 68d76185fbd57a6ba9ba5345a0b65bf3a73aef8a
-
-**MEAN OF THE SIGNAL'S POWER**
-
 $P_{dB} = 10 \log_{10} (\dfrac{1}N · \sum_{n = 0}^{N-1 }x²[{n}] )$;
 
 **MEAN OF AMPLITUDE**
