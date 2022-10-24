@@ -63,5 +63,5 @@ Once having these, we compute the 3 following audio/statistics caracterization:
 
 **MEAN OF THE SIGNAL'S POWER**
 
-$10log10{x}$
+$10\log_10 x$
 
