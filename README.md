@@ -63,5 +63,5 @@ Once having these, we compute the 3 following audio/statistics caracterization:
 
 **MEAN OF THE SIGNAL'S POWER**
 
-$P_{dB} = 10 \log_{10} (1/N \sum_{n = 0}^{N-1}x²[{n}] )$
+$P_{dB} = 10 \log_{10} (1/N · \sum_{n = 0}^{N-1 }x²[{n}] )$
 
