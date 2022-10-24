@@ -38,12 +38,12 @@ Programming Skills
 Basically an introduction to audio processing.
 Given an audio file and taking into account the WAVE structure.
 
-| Canonical WAVE FORMAT (each cell is 4 bytes) |a|a |a |    a          |
+| Canonical WAVE FORMAT (each cell is 4 bytes) | a | a  | a  |    a    |
 |------------------------------------------------------------------|
-|  ChunkID    |   ChunkSize  | Format | SubchunkID | SubchunkSize|        
+|  ChunkID    |   ChunkSize  | Format | SubchunkID | SubchunkSize |        
 | AudioFormat | NumChannels | SampleRate| ByteRate | BlockALign |
-| BitsPerSample| SubChunk21D | Subchunk2 Size| DATA|DATA |
-|    DATA |DATA| DATA| DATA | DATA|
+| BitsPerSample| SubChunk21D | Subchunk2 Size| DATA | DATA |
+|    DATA | DATA | DATA | DATA | DATA |
 
 
 
