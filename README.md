@@ -21,7 +21,28 @@ Programming Skills
     - Makefile
     - Bash
     - Git
-    
+    - Structs
+    - "Oriented Programming" with C
+    - Dynamic memory allocation (malloc, free)
+    - Meson builds
+    - Ninja
+    - Audacity export files and previous analysis
+    - docopt
+
+    and more
+
+
+**P1**
+----
+
+Basically an introduction to audio processing.
+Given an audio file, and understanding the file structure.
+| Canonical WAVE FORMAT (each cell is 4 bytes)                    |
+------------------------------------------------------------------
+|  ChunkID    |   ChunkSize  | Format | SubchunkID | SubchunkSize|        
+| AudioFormat | NumChannels | SampleRate| ByteRate | BlockALign |
+| BitsPerSample| SubChunk21D | Subchunk2 Size| | |
+|    DATA |
 
 
 
