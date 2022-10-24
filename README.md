@@ -67,7 +67,7 @@ $P_{dB} = 10 \log_{10} (\dfrac{1}N · \sum_{n = 0}^{N-1 }x²[{n}] )$;
 
 **MEAN OF AMPLITUDE**
 
-$A = \dfrac{1}N \sum_{n=0}^{N-1}|x[n]|   $;
+$A = \dfrac{1}N \left(\sum_{n=0}^{N-1}|x[n]|\right)   $;
 
 **CROSSES PER ZERO RATE**
 
