@@ -40,10 +40,22 @@ Given an audio file and taking into account the WAVE structure.
 
 | Canonical WAVE FORMAT (each cell is 4 bytes) |
 |------------------------------------------------------------------|
-|  ChunkID    |   ChunkSize  | Format | SubchunkID | SubchunkSize |        
-| AudioFormat | NumChannels | SampleRate| ByteRate | BlockALign |
-| BitsPerSample| SubChunk21D | Subchunk2 Size| DATA | DATA |
-|    DATA | DATA | DATA | DATA | DATA |
-
+|  ChunkID  |  
+|   ChunkSize  |
+| Format | 
+|SubchunkID |
+| SubchunkSize |        
+| AudioFormat |
+| NumChannels | 
+|SampleRate|
+ ByteRate | 
+ |BlockALign |
+| BitsPerSample|
+|SubChunk21D | 
+|Subchunk2 Size| 
+|DATA | 
+|DATA |
+|DATA | 
+|.... |
 
 
