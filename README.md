@@ -32,7 +32,7 @@ Programming Skills
     and more
 
 
-**P1**
+**P1:: PROCESSING BY BLOCKS**
 ----
 
 Basically an introduction to audio processing.
@@ -58,4 +58,10 @@ Given an audio file and taking into account the WAVE structure.
 |DATA | 
 |.... |
 
+Once obtaining the information. We decide the best size for our sample blocks. 
+Once having these, we compute the 3 following audio/statistics caracterization:
+
+**MEAN OF THE SIGNAL'S POWER**
+
+$\10*log{x}$
 
