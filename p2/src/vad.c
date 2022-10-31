@@ -97,7 +97,7 @@ VAD_STATE vad(VAD_DATA *vad_data, float *x) {
 
     if(Nint==15){
       vad_data->umbral1 = 10*log10((vad_data->umbral1)/Nint) + vad_data->alpha1;
-      fprintf(stdout, "%f", vad_data->umbral1);
+      //fprintf(stdout, "%f", vad_data->umbral1);
       vad_data->umbral2 = vad_data->umbral1 + vad_data->alpha2;
       vad_data->state = ST_SILENCE;
       Nint =0;
@@ -105,7 +105,7 @@ VAD_STATE vad(VAD_DATA *vad_data, float *x) {
     else{
         
         vad_data->umbral1 += pow(10, (f.p/10) );
-        fprintf(stdout, "%f", vad_data->umbral1);
+        //fprintf(stdout, "%f", vad_data->umbral1);
         Nint++;
       }
 

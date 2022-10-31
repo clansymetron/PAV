@@ -33,8 +33,8 @@ int main(int argc, char *argv[]) {
   input_wav  = args.input_wav;
   output_vad = args.output_vad;
   output_wav = args.output_wav;
-  alfa1 = atof(args.alfa1);
-  alfa2 = atof(args.alfa2);
+  alfa1 = atof(args.alfa1); //reading from argument first treshold
+  alfa2 = atof(args.alfa2); 
   
 
   if (input_wav == 0 || output_vad == 0) {
@@ -75,52 +75,79 @@ int main(int argc, char *argv[]) {
   for (i=0; i< frame_size; ++i) buffer_zeros[i] = 0.0F;
 
   frame_duration = (float) frame_size/ (float) sf_info.samplerate;
-  last_state = ST_UNDEF;
-  defined_state = ST_SILENCE;
+  last_state = ST_UNDEF; //last state is the last different state recorded.
+  defined_state = ST_SILENCE; //defined state is considered to be the last SILENCE or VOICE state. In order to compute transitions 
 
   for (t = last_t = defined_t = 0; ; t++) { /* For each frame ... */
     /* End loop when file has finished (or there is an error) */
     if  ((n_read = sf_read_float(sndfile_in, buffer, frame_size)) != frame_size) break;
 
     if (sndfile_out != 0) {
-      sf_write_float(sndfile_out, buffer, frame_size);
+      sf_write_float(sndfile_out, buffer, frame_size); //We write into the output file the samples of the buffer
     }
 
     state = vad(vad_data, buffer);
     if (verbose & DEBUG_VAD) vad_show_state(vad_data, stdout);
-
+    
     /* TODO: print only SILENCE and VOICE labels */
-    /* As it is, it prints UNDEF segments but is should be merge to the proper value */
+ 
     if (state != last_state) {
-      if (t != last_t){
+      if (t != last_t){ 
+        //We see if there is a change from Silence to Voice or Voice to Silence. If it is the case, we write into the vad file.
         if((defined_state==ST_SILENCE && state==ST_VOICE && last_state==ST_MYB_VOICE) || (defined_state ==ST_VOICE && state== ST_SILENCE && last_state==ST_MYB_SILENCE)){
+            
+            //defined_t points to the time where Silence or Voice starts. It refers to the previous one in analysis. last_t -1 points to the time where the state was different for last time.
             fprintf(vadfile, "%.5f\t%.5f\t%s\n", defined_t * frame_duration, (last_t-1) * frame_duration, state2str(defined_state));
-            defined_t = last_t-1;
-            defined_state = state; 
+            
+            if (sndfile_out != 0 && defined_state == ST_SILENCE) { //if there is output file and the last defined state is Silence (which means we have just switch to voice) we put to 0 all the samples of silence.
+              sf_seek(sndfile_out, defined_t* frame_size, SEEK_SET); //Point to the position of the file where the Silence starts (defined_t * frame_size)
+              int frames = last_t-1-defined_t; //Difference of frames in which the state has taken place
+              
+              sf_write_float(sndfile_out,buffer_zeros, frames* frame_size); //put to 0 all the samples
+              
+              sf_seek(sndfile_out, 0, SEEK_END); // point to the end of the file for the next iteration to write the buffer
+    }
+            defined_t = last_t-1; //the defined_t will become last_t-1 as it is now the last different state.
+            defined_state = state; //the defined_state will now become the current state. As it is or Silence or Voice
         }
       }
       if (last_state == ST_UNDEF){
-           last_state=state;
+           last_state=state; //for the first iteration
         }
         
-      last_state = state;
+      last_state = state; //updating the state of the loop and the last_state
       last_t = t;
       
     }  
 
-    if (sndfile_out != 0) {
-      /* TODO: go back and write zeros in silence segments */
-    }
+    
   }
 
   state = vad_close(vad_data);
   /* TODO: what do you want to print, for last frames? */
   if (t != last_t){
-    if(state==ST_VOICE || state== ST_SILENCE)
+    if(state==ST_VOICE || state== ST_SILENCE){ //If the current state is Defined, We do the same as in the previous loop but with the last frame
+
       fprintf(vadfile, "%.5f\t%.5f\t%s\n", defined_t * frame_duration, t * frame_duration + n_read / (float) sf_info.samplerate, state2str(state));
-    else{
-      if(defined_state == ST_SILENCE)  state = ST_SILENCE;
-        else state = ST_VOICE;
+      
+      if (sndfile_out != 0 && state == ST_SILENCE) {
+              sf_seek(sndfile_out, defined_t* frame_size, SEEK_SET);
+              int frames = t-defined_t;
+              
+              sf_write_float(sndfile_out,buffer_zeros, frames* frame_size + n_read); //We need to consider the n_read samples of last frame 
+              //Here there is no need to update the pointer as it is the last frame
+      }
+    }
+
+    else{ //if it is in an undefined_state (MYBE) we have to consider the output
+      if(defined_state == ST_SILENCE){
+        state = ST_SILENCE; //if the last defined state was silence, it will be silence
+         if (sndfile_out != 0) {
+              sf_seek(sndfile_out, defined_t* frame_size, SEEK_SET);
+              int frames = t-defined_t;
+              fprintf(stdout, "%d  ", frames);
+      }  }
+        else state = ST_VOICE; // if the defined_state was voice, it will be voice. But normally the end of files appear to be silence
      fprintf(vadfile, "%.5f\t%.5f\t%s\n", defined_t * frame_duration, t * frame_duration + n_read / (float) sf_info.samplerate, state2str(state));
       }
     
