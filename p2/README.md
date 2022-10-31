@@ -117,21 +117,38 @@ Ejercicios
 		Duración mínima del silencio podemos decir que es 0,7s y de voz 1,2s.
 
 	* ¿Es capaz de sacar alguna conclusión a partir de la evolución de la tasa de cruces por cero?
-		No.
+		La tasa de cruces por cero nos puede ayudar a diferenciar cuando se trata de silencio o de una consonante fricativa, por ejemplo. Esto es, ya que estas tienen poca potencia y podrían llegar a considerarse silencio. Sin embargo, en nuestro algoritmo no lo hemos usado pues no ayudaba a mejorar las estadísticas.
 
 ### Desarrollo del detector de actividad vocal
 
 - Complete el código de los ficheros de la práctica para implementar un detector de actividad vocal en
   tiempo real tan exacto como sea posible. Tome como objetivo la maximización de la puntuación-F `TOTAL`.
+### ===> TOTAL: 94.203%
 
 - Inserte una gráfica en la que se vea con claridad la señal temporal, el etiquetado manual y la detección
   automática conseguida para el fichero grabado al efecto. 
 
+
+  ***
+
 - Explique, si existen. las discrepancias entre el etiquetado manual y la detección automática.
+
+### Analizando los resultados de Recall y Precisión vemos que la peor es el recall del Silencio con 87,6% y el mejor el recall de la voz con un 96.38%. Esto indica que hemos considerado tramas de silencio como voz, maximizando la detección de voz para no perder información. Consideramos que caracterizar tramas de voz como silencio es más perjudicial que considerar tramas de silencio como voz, ya que la información se preserva.
+
+
 
 - Evalúe los resultados sobre la base de datos `db.v4` con el script `vad_evaluation.pl` e inserte a 
   continuación las tasas de sensibilidad (*recall*) y precisión para el conjunto de la base de datos (sólo
   el resumen).
+
+ ### /home/alejandro/Desktop/CFIS/4A/PAV/practicas/PAV/p2/db.v4/2018-19q1/pav_4385.lab: 96.981%
+
+### **************** Summary ****************
+### Recall V:368.89/382.74 96.38%   Precision V:368.89/402.50 91.65%   F-score V (2)  : 95.40%
+### Recall S:237.40/271.01 87.60%   Precision S:237.40/251.25 94.49%   F-score S (1/2): 93.02%
+### ===> TOTAL: 94.203%
+
+
 
 
 ### Trabajos de ampliación
@@ -141,17 +158,44 @@ Ejercicios
 - Si ha desarrollado el algoritmo para la cancelación de los segmentos de silencio, inserte una gráfica en
   la que se vea con claridad la señal antes y después de la cancelación (puede que `wavesurfer` no sea la
   mejor opción para esto, ya que no es capaz de visualizar varias señales al mismo tiempo).
+  
+  ***
+
+ 
 
 #### Gestión de las opciones del programa usando `docopt_c`
 
 - Si ha usado `docopt_c` para realizar la gestión de las opciones y argumentos del programa `vad`, inserte
   una captura de pantalla en la que se vea el mensaje de ayuda del programa.
 
+### Hecho
+
+bin/vad --help
+VAD - Voice Activity Detector
+
+Usage:
+   vad [options] -i <input-wav> -o <output-vad> [-w <output-wav>]
+   vad (-h | --help)
+   vad --version
+
+Options:
+   -i FILE, --input-wav=FILE   WAVE file for voice activity detection
+   -o FILE, --output-vad=FILE  Label file with the result of VAD
+   -1, --alfa1 REAL    Value of parameter alfa1
+   -2, --alfa2 REAL    Value of parameter alfa2
+   -w FILE, --output-wav=FILE  WAVE file with silences cleared
+   -v, --verbose  Show debug information
+   -h, --help     Show this screen
+   --version      Show the version of the project
+
 
 ### Contribuciones adicionales y/o comentarios acerca de la práctica
 
 - Indique a continuación si ha realizado algún tipo de aportación suplementaria (algoritmos de detección o 
   parámetros alternativos, etc.).
+
+### Hemos usado dos umbrales de detección para poder afinar más con la detección. Además, hemos sido más restrictivos a la hora de pasar de maybeSilence a silence que de maybeVoice a voice. Esto para maximizar la detección de voz, pues no puede perderse información. Para ello hemos usado tanto los umbrales como el tiempo en los estados (calculado a partir del número de tramas). 
+
 
 - Si lo desea, puede realizar también algún comentario acerca de la realización de la práctica que
   considere de interés de cara a su evaluación.
@@ -162,3 +206,6 @@ Ejercicios
 Recuerde comprobar que el repositorio cuenta con los códigos correctos y en condiciones de ser 
 correctamente compilados con la orden `meson bin; ninja -C bin`. El programa generado (`bin/vad`) será
 el usado, sin más opciones, para realizar la evaluación *ciega* del sistema.
+
+
+### Hecho
