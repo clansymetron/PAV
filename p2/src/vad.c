@@ -6,7 +6,7 @@
 #include "pav_analysis.h"
 
 const float FRAME_TIME = 10.0F; /* in ms. */
-int Nint = 0; /*Constant that counts the number of Tramas Iniciales */
+int nint = 0; /*Constant that counts the number of Initial Frames to compute power*/
 /* 
  * As the output state is only ST_VOICE, ST_SILENCE, or ST_UNDEF,
  * only this labels are needed. You need to add all labels, in case
@@ -98,18 +98,18 @@ VAD_STATE vad(VAD_DATA *vad_data, float *x) {
     /*When the number of frames is 15 we enter the if and compute the Tresholds. We have done this to stablish the first treshold to the level of noise 
      of the system in which the recording was recorded. Doing the logarythmic mean of the 15 first frames*/
 
-    if(Nint==15){
-      vad_data->umbral1 = 10*log10((vad_data->umbral1)/Nint) + vad_data->alpha1;
+    if(nint==15){
+      vad_data->umbral1 = 10*log10((vad_data->umbral1)/nint) + vad_data->alpha1;
       //fprintf(stdout, "%f", vad_data->umbral1);
       vad_data->umbral2 = vad_data->umbral1 + vad_data->alpha2;
       vad_data->state = ST_SILENCE;
-      Nint =0;
+      nint =0;
     }
     else{
         
         vad_data->umbral1 += pow(10, (f.p/10) );
         //fprintf(stdout, "%f", vad_data->umbral1);
-        Nint++;
+        nint++;
       }
 
     break;
