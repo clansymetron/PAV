@@ -69,6 +69,9 @@ VAD_STATE vad_close(VAD_DATA *vad_data) {
    */
   VAD_STATE state = vad_data->state;
 
+
+
+
   free(vad_data);
   return state;
 }

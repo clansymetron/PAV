@@ -25,17 +25,23 @@ int main(int argc, char *argv[]) {
   unsigned int t, last_t, defined_t; /* in frames */
 
   char	*input_wav, *output_vad, *output_wav;
-  float alfa1; /*Cambiar el valor de alpha1*/
-  float alfa2;
+  float alfa1 = 3.53; /*Cambiar el valor de alpha1*/
+  float alfa2 = 5.01;
   DocoptArgs args = docopt(argc, argv, /* help */ 1, /* version */ "2.0");
 
   verbose    = args.verbose ? DEBUG_VAD : 0;
   input_wav  = args.input_wav;
   output_vad = args.output_vad;
   output_wav = args.output_wav;
-  alfa1 = atof(args.alfa1); //reading from argument first treshold
-  alfa2 = atof(args.alfa2); 
-  
+
+  char* alf1 = args.alfa1;
+  char* alf2 = args.alfa2;
+
+if(alf1) alfa1 = atof(args.alfa1);
+if(alf2) alfa2 = atof(args.alfa2);
+
+
+fprintf(stdout, "%f %f ", alfa1, alfa2);  
 
   if (input_wav == 0 || output_vad == 0) {
     fprintf(stderr, "%s\n", args.usage_pattern);
@@ -101,10 +107,17 @@ int main(int argc, char *argv[]) {
             
             if (sndfile_out != 0 && defined_state == ST_SILENCE) { //if there is output file and the last defined state is Silence (which means we have just switch to voice) we put to 0 all the samples of silence.
               sf_seek(sndfile_out, defined_t* frame_size, SEEK_SET); //Point to the position of the file where the Silence starts (defined_t * frame_size)
-              int frames = last_t-1-defined_t; //Difference of frames in which the state has taken place
+              int frames = (last_t-1-defined_t)*frame_size; //Difference of frames in which the state has taken place
               
-              sf_write_float(sndfile_out,buffer_zeros, frames* frame_size); //put to 0 all the samples
               
+              while(frames >= 161 * frame_size){ //we have to divide the writes because the function does not support numbers larger than approx n ~= 161*frame
+
+                sf_write_float(sndfile_out,buffer_zeros, 161* frame_size);
+                frames -= 161*frame_size;
+              }
+
+              sf_write_float(sndfile_out,buffer_zeros, frames); // last write. If frames was inittialy < (161 * frames_size) it will also be the only write
+                                                               // It is actually the normal thing. But we have to consider it for large silence frames.
               sf_seek(sndfile_out, 0, SEEK_END); // point to the end of the file for the next iteration to write the buffer
     }
             defined_t = last_t-1; //the defined_t will become last_t-1 as it is now the last different state.
@@ -123,7 +136,16 @@ int main(int argc, char *argv[]) {
     
   }
 
+
+  
+
   state = vad_close(vad_data);
+
+   if (sndfile_out != 0) {
+      sf_write_float(sndfile_out, buffer, n_read); //We write into the output file the samples of the last buffer
+    }
+   
+
   /* TODO: what do you want to print, for last frames? */
   if (t != last_t){
     if(state==ST_VOICE || state== ST_SILENCE){ //If the current state is Defined, We do the same as in the previous loop but with the last frame
@@ -131,10 +153,20 @@ int main(int argc, char *argv[]) {
       fprintf(vadfile, "%.5f\t%.5f\t%s\n", defined_t * frame_duration, t * frame_duration + n_read / (float) sf_info.samplerate, state2str(state));
       
       if (sndfile_out != 0 && state == ST_SILENCE) {
-              sf_seek(sndfile_out, defined_t* frame_size, SEEK_SET);
-              int frames = t-defined_t;
+              sf_seek(sndfile_out, defined_t* frame_size  , SEEK_SET); // Point to the defined_t
               
-              sf_write_float(sndfile_out,buffer_zeros, frames* frame_size + n_read); //We need to consider the n_read samples of last frame 
+              int frames = (t-defined_t) * frame_size + n_read; //We need to consider the n_read samples of last frame
+              
+            
+              while(frames >= 161 * frame_size){ //we have to divide the writes because the function does not support numbers larger than approx 161*frame
+
+                sf_write_float(sndfile_out,buffer_zeros, 161* frame_size);
+                frames -= 161*frame_size;
+              }
+
+              sf_write_float(sndfile_out,buffer_zeros, frames); // last write. If frames was inittialy < 161 * frames_size also the only write
+              
+               
               //Here there is no need to update the pointer as it is the last frame
       }
     }
@@ -144,8 +176,16 @@ int main(int argc, char *argv[]) {
         state = ST_SILENCE; //if the last defined state was silence, it will be silence
          if (sndfile_out != 0) {
               sf_seek(sndfile_out, defined_t* frame_size, SEEK_SET);
-              int frames = t-defined_t;
-              fprintf(stdout, "%d  ", frames);
+             int frames = (t-defined_t) * frame_size + n_read; //We need to consider the n_read samples of last frame
+              
+            
+              while(frames >= 161 * frame_size){ //we have to divide the writes because the function does not support numbers larger than approx 161*frame
+
+                sf_write_float(sndfile_out,buffer_zeros, 161* frame_size);
+                frames -= 161*frame_size;
+              }
+
+              sf_write_float(sndfile_out,buffer_zeros, frames); 
       }  }
         else state = ST_VOICE; // if the defined_state was voice, it will be voice. But normally the end of files appear to be silence
      fprintf(vadfile, "%.5f\t%.5f\t%s\n", defined_t * frame_duration, t * frame_duration + n_read / (float) sf_info.samplerate, state2str(state));

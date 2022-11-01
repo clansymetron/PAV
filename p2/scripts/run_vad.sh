@@ -9,7 +9,7 @@ DIR_P2=$HOME/Desktop/CFIS/4A/PAV/practicas/PAV/p2
 DB=$DIR_P2/db.v4
 
 
-CMD="$DIR_P2/src/p2 --alfa1=3.53 --alfa2=5.01"
+CMD="$DIR_P2/bin/vad --alfa1=3.53 --alfa2=5.01" #Values put in run_vad
 
 for filewav in $DB/*/*wav; do
 #    echo
