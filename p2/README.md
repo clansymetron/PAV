@@ -105,6 +105,9 @@ Ejercicios
   continuación, una captura de `wavesurfer` en la que se vea con claridad la señal temporal, el contorno de
   potencia y la tasa de cruces por cero, junto con el etiquetado manual de los segmentos.
 
+	Audio2.lab 
+
+	Vemos que nuestro sistema (Audio2.vad) no funcion especialmente bien con este archivo. Se debe a que la voz suena con un ruido muy bajo. Sin embargo, como hemos optimizado el F-Score total , no estan relevante.
 
 - A la vista de la gráfica, indique qué valores considera adecuados para las magnitudes siguientes:
 
@@ -114,7 +117,8 @@ Ejercicios
 	  Si hay un incremento de 27dB podemos decir que empieza un segemnto de voz.
 
 	* Duración mínima razonable de los segmentos de voz y silencio.
-		Duración mínima del silencio podemos decir que es 0,7s y de voz 1,2s.
+		
+		Duración mínima del silencio podemos decir que es 0,7s y de voz 1,2s. (Muy lejos de lo que observamos con otros audios, por lo que en el programa utilizamos otros parámetros)
 
 	* ¿Es capaz de sacar alguna conclusión a partir de la evolución de la tasa de cruces por cero?
 		La tasa de cruces por cero nos puede ayudar a diferenciar cuando se trata de silencio o de una consonante fricativa, por ejemplo. Esto es, ya que estas tienen poca potencia y podrían llegar a considerarse silencio. Sin embargo, en nuestro algoritmo no lo hemos usado pues no ayudaba a mejorar las estadísticas.
@@ -123,17 +127,18 @@ Ejercicios
 
 - Complete el código de los ficheros de la práctica para implementar un detector de actividad vocal en
   tiempo real tan exacto como sea posible. Tome como objetivo la maximización de la puntuación-F `TOTAL`.
-### ===> TOTAL: 94.203%
+	
+	===> TOTAL: 94.203%
 
 - Inserte una gráfica en la que se vea con claridad la señal temporal, el etiquetado manual y la detección
   automática conseguida para el fichero grabado al efecto. 
 
 
-  ***
+	Aprovechando que hemos hecho el archivo wav de salida, adjuntamos la gráfica de dos señales de voz de la base de datos (Una original y otra con el vad) y se verá de forma más clara.El archivo es WaveSurfer_Graphs.pdf. Se ha realizado con el fichero de audio pav_4305.wav. Se puede consultar el .vad en prueba4305.vad y el fichero de audio de salida en pruebapp2.wav.
 
 - Explique, si existen. las discrepancias entre el etiquetado manual y la detección automática.
 
-### Analizando los resultados de Recall y Precisión vemos que la peor es el recall del Silencio con 87,6% y el mejor el recall de la voz con un 96.38%. Esto indica que hemos considerado tramas de silencio como voz, maximizando la detección de voz para no perder información. Consideramos que caracterizar tramas de voz como silencio es más perjudicial que considerar tramas de silencio como voz, ya que la información se preserva.
+	Analizando los resultados de Recall y Precisión vemos que la peor es el recall del Silencio con 87,6% y el mejor el recall de la voz con un 96.38%. Esto indica que hemos considerado tramas de silencio como voz, maximizando la detección de voz para no perder información. Consideramos que caracterizar tramas de voz como silencio es más perjudicial que considerar tramas de silencio como voz, ya que la información se preserva.
 
 
 
@@ -141,12 +146,11 @@ Ejercicios
   continuación las tasas de sensibilidad (*recall*) y precisión para el conjunto de la base de datos (sólo
   el resumen).
 
- ### /home/alejandro/Desktop/CFIS/4A/PAV/practicas/PAV/p2/db.v4/2018-19q1/pav_4385.lab: 96.981%
-
-### **************** Summary ****************
-### Recall V:368.89/382.74 96.38%   Precision V:368.89/402.50 91.65%   F-score V (2)  : 95.40%
-### Recall S:237.40/271.01 87.60%   Precision S:237.40/251.25 94.49%   F-score S (1/2): 93.02%
-### ===> TOTAL: 94.203%
+  /home/alejandro/Desktop/CFIS/4A/PAV/practicas/PAV/p2/db.v4/2018-19q1/pav_4385.lab: 96.981%
+ 	 **************** Summary ****************
+	Recall V:368.89/382.74 96.38%   Precision V:368.89/402.50 91.65%   F-score V (2)  : 95.40%
+	Recall S:237.40/271.01 87.60%   Precision S:237.40/251.25 94.49%   F-score S (1/2): 93.02%
+	===> TOTAL: 94.203%
 
 
 
@@ -159,7 +163,8 @@ Ejercicios
   la que se vea con claridad la señal antes y después de la cancelación (puede que `wavesurfer` no sea la
   mejor opción para esto, ya que no es capaz de visualizar varias señales al mismo tiempo).
   
-  ***
+  Hecho·
+  Adjuntada en el zip como WaveSurfer_Graphs.pdf
 
  
 
@@ -168,7 +173,7 @@ Ejercicios
 - Si ha usado `docopt_c` para realizar la gestión de las opciones y argumentos del programa `vad`, inserte
   una captura de pantalla en la que se vea el mensaje de ayuda del programa.
 
-### Hecho
+Hecho. El Help funcionaría: 
 
 bin/vad --help
 VAD - Voice Activity Detector
@@ -194,7 +199,7 @@ Options:
 - Indique a continuación si ha realizado algún tipo de aportación suplementaria (algoritmos de detección o 
   parámetros alternativos, etc.).
 
-### Hemos usado dos umbrales de detección para poder afinar más con la detección. Además, hemos sido más restrictivos a la hora de pasar de maybeSilence a silence que de maybeVoice a voice. Esto para maximizar la detección de voz, pues no puede perderse información. Para ello hemos usado tanto los umbrales como el tiempo en los estados (calculado a partir del número de tramas). 
+	Hemos usado dos umbrales de detección para poder afinar más con la detección. Además, hemos sido más restrictivos a la hora de pasar de maybeSilence a silence que de maybeVoice a voice. Esto para maximizar la detección de voz, pues no puede perderse información. Para ello hemos usado tanto los umbrales como el tiempo en los estados (calculado a partir del número de tramas). 
 
 
 - Si lo desea, puede realizar también algún comentario acerca de la realización de la práctica que

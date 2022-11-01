@@ -95,8 +95,8 @@ VAD_STATE vad(VAD_DATA *vad_data, float *x) {
 
   switch (vad_data->state) {
   case ST_INIT: 
-    /*If number of Tramas Iniciales is 15 we enter the if and compute the Umbrales. We have done this to stablish Umbral1 to the level of noise 
-     of the system in wich the recording was recorded.*/
+    /*When the number of frames is 15 we enter the if and compute the Tresholds. We have done this to stablish the first treshold to the level of noise 
+     of the system in which the recording was recorded. Doing the logarythmic mean of the 15 first frames*/
 
     if(Nint==15){
       vad_data->umbral1 = 10*log10((vad_data->umbral1)/Nint) + vad_data->alpha1;
@@ -116,23 +116,23 @@ VAD_STATE vad(VAD_DATA *vad_data, float *x) {
 
   case ST_SILENCE:
     if (f.p > vad_data->umbral1)
-      vad_data->state = ST_MYB_VOICE; /*If Power of Trama is bigger than Umbral1 we enter MYBV state*/
+      vad_data->state = ST_MYB_VOICE; /*If Power of frame is bigger than Treshold1 we enter MYBV state*/
     break;
 
   case ST_VOICE:
     if (f.p < vad_data->umbral2)
-      vad_data->state = ST_MYB_SILENCE; /*If power is lower than Umbral2 we enter MYBS state*/
+      vad_data->state = ST_MYB_SILENCE; /*If power is lower than Tresholdl2 we enter MYBS state*/
     break;
 
     case ST_MYB_SILENCE: 
         if(f.p < vad_data->umbral2){  
           if(time_passed>0.266 || (time_passed>0.204 && f.p<vad_data->umbral1)){  /*We use 2 conditions to change to Silence state beacause 
-                                                                                      wwe want to be very sure we are in Silence state and not lose info.*/
+                                                                                      we want to be very sure we are in Silence state and not lose info.*/
              vad_data->state = ST_SILENCE;
              vad_data->maybe_count= 0; /*restart the Maybe counter*/
           }
           else {
-            vad_data->maybe_count ++;  /*If conditions are not passed we add 1 to the count of Tramas in a Maybe state */
+            vad_data->maybe_count ++;  /*If conditions are not passed we add 1 to the count of frames in a Maybe state */
           }
         }
         else{
@@ -151,7 +151,7 @@ VAD_STATE vad(VAD_DATA *vad_data, float *x) {
              vad_data->maybe_count= 0;  /*restart the Maybe counter*/
           }
           else {
-            vad_data->maybe_count ++; /*If conditions are not passed we add 1 to the count of Tramas in a Maybe state */
+            vad_data->maybe_count ++; /*If conditions are not passed we add 1 to the count of frames in a Maybe state */
           }
         }
         else{
