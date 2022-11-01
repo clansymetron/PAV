@@ -6,7 +6,7 @@
 #include "pav_analysis.h"
 
 const float FRAME_TIME = 10.0F; /* in ms. */
-int Nint = 0;
+int Nint = 0; /*Constant that counts the number of Tramas Iniciales */
 /* 
  * As the output state is only ST_VOICE, ST_SILENCE, or ST_UNDEF,
  * only this labels are needed. You need to add all labels, in case
@@ -37,7 +37,8 @@ Features compute_features(const float *x, int N) {
    * Input: x[i] : i=0 .... N-1 
    * Ouput: computed features
    */
- 
+  
+  /*we compute the different usefull features useing functions created in last Practica("pav_analysis.c") */
   Features feat;
   feat.p=compute_power(x,N);
   feat.zcr = compute_zcr(x, N,16000);
@@ -90,10 +91,12 @@ VAD_STATE vad(VAD_DATA *vad_data, float *x) {
 
   Features f = compute_features(x, vad_data->frame_length);
   vad_data->last_feature = f.p; /* save feature, in case you want to show */
-  float time_passed = FRAME_TIME * 1e-3 * vad_data->maybe_count;
+  float time_passed = FRAME_TIME * 1e-3 * vad_data->maybe_count; /*Time en s. that we are in the state MaybeSilence(MYBS) or MaybeVoice(MYBV) */
 
   switch (vad_data->state) {
   case ST_INIT: 
+    /*If number of Tramas Iniciales is 15 we enter the if and compute the Umbrales. We have done this to stablish Umbral1 to the level of noise 
+     of the system in wich the recording was recorded.*/
 
     if(Nint==15){
       vad_data->umbral1 = 10*log10((vad_data->umbral1)/Nint) + vad_data->alpha1;
@@ -113,27 +116,28 @@ VAD_STATE vad(VAD_DATA *vad_data, float *x) {
 
   case ST_SILENCE:
     if (f.p > vad_data->umbral1)
-      vad_data->state = ST_MYB_VOICE;
+      vad_data->state = ST_MYB_VOICE; /*If Power of Trama is bigger than Umbral1 we enter MYBV state*/
     break;
 
   case ST_VOICE:
     if (f.p < vad_data->umbral2)
-      vad_data->state = ST_MYB_SILENCE;
+      vad_data->state = ST_MYB_SILENCE; /*If power is lower than Umbral2 we enter MYBS state*/
     break;
 
-    case ST_MYB_SILENCE: //cruces por cero
-        if(f.p < vad_data->umbral2){
-          if(time_passed>0.266 || (time_passed>0.204 && f.p<vad_data->umbral1)){
+    case ST_MYB_SILENCE: 
+        if(f.p < vad_data->umbral2){  
+          if(time_passed>0.266 || (time_passed>0.204 && f.p<vad_data->umbral1)){  /*We use 2 conditions to change to Silence state beacause 
+                                                                                      wwe want to be very sure we are in Silence state and not lose info.*/
              vad_data->state = ST_SILENCE;
-             vad_data->maybe_count= 0;
+             vad_data->maybe_count= 0; /*restart the Maybe counter*/
           }
           else {
-            vad_data->maybe_count ++;
+            vad_data->maybe_count ++;  /*If conditions are not passed we add 1 to the count of Tramas in a Maybe state */
           }
         }
         else{
-          vad_data->state = ST_VOICE;
-          vad_data->maybe_count= 0;
+          vad_data->state = ST_VOICE; /*If conditions above are not passed we can say we are in Voise state*/
+          vad_data->maybe_count= 0;  /*restart the Maybe counter*/
 
         }
 
@@ -142,17 +146,17 @@ VAD_STATE vad(VAD_DATA *vad_data, float *x) {
 
     case ST_MYB_VOICE:
         if(f.p > vad_data->umbral1){
-          if((time_passed>0.05 && f.p>vad_data->alpha2) || time_passed >0.08){
+          if((time_passed>0.05 && f.p>vad_data->alpha2) || time_passed >0.08){ /*We are less restrictive to enter Voice state to not lose information*/
              vad_data->state = ST_VOICE;
-             vad_data->maybe_count= 0;
+             vad_data->maybe_count= 0;  /*restart the Maybe counter*/
           }
           else {
-            vad_data->maybe_count ++;
+            vad_data->maybe_count ++; /*If conditions are not passed we add 1 to the count of Tramas in a Maybe state */
           }
         }
         else{
           vad_data->state = ST_SILENCE;
-          vad_data->maybe_count= 0;
+          vad_data->maybe_count= 0;  /*restart the Maybe counter*/
 
         }
 
