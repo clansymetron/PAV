@@ -40,8 +40,7 @@ int main(int argc, char *argv[]) {
 if(alf1) alfa1 = atof(args.alfa1);
 if(alf2) alfa2 = atof(args.alfa2);
 
-
-fprintf(stdout, "%f %f ", alfa1, alfa2);  
+ 
 
   if (input_wav == 0 || output_vad == 0) {
     fprintf(stderr, "%s\n", args.usage_pattern);
