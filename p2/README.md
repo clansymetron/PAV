@@ -106,10 +106,12 @@ Ejercicios
   potencia y la tasa de cruces por cero, junto con el etiquetado manual de los segmentos.
 
 	Tenemos la siguiente gráfica: 
+	
 	![Alt text](./wave.png?raw=true "Optional Title")
 	
 
-		 Nuestro etiquetado manual es :
+    Nuestro etiquetado manual es :
+	
 	| start | end | value |
 	| --- | --- | --- |
 	| 0.0000000 | 0.7550000 | S |
