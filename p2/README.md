@@ -121,6 +121,7 @@ Ejercicios
 		Duración mínima del silencio podemos decir que es 0,7s y de voz 1,2s. (Muy lejos de lo que observamos con otros audios, por lo que en el programa utilizamos otros parámetros)
 
 	* ¿Es capaz de sacar alguna conclusión a partir de la evolución de la tasa de cruces por cero?
+		
 		La tasa de cruces por cero nos puede ayudar a diferenciar cuando se trata de silencio o de una consonante fricativa, por ejemplo. Esto es, ya que estas tienen poca potencia y podrían llegar a considerarse silencio. Sin embargo, en nuestro algoritmo no lo hemos usado pues no ayudaba a mejorar las estadísticas.
 
 ### Desarrollo del detector de actividad vocal
@@ -134,7 +135,14 @@ Ejercicios
   automática conseguida para el fichero grabado al efecto. 
 
 
-	Aprovechando que hemos hecho el archivo wav de salida, adjuntamos la gráfica de dos señales de voz de la base de datos (Una original y otra con el vad) y se verá de forma más clara.El archivo es WaveSurfer_Graphs.pdf. Se ha realizado con el fichero de audio pav_4305.wav. Se puede consultar el .vad en prueba4305.vad y el fichero de audio de salida en pruebapp2.wav.
+	Aprovechando que hemos hecho el archivo wav de salida, adjuntamos la gráfica de dos señales de voz de la base de datos (Una original y otra con el vad) y se verá de forma más clara:
+	
+    ![Alt text](./WaveSurfer_Graphs-1.png?raw=true "Optional Title")
+	
+	
+	 Se ha realizado con el fichero de audio pav_4305.wav. Se puede consultar el .vad en prueba4305.vad y el fichero de audio de salida en pruebapp2.wav. El contenido del archivo .vad en comparacion con el teórico es:
+
+	 ![Alt text](./comp.png?raw=true "Optional Title")
 
 - Explique, si existen. las discrepancias entre el etiquetado manual y la detección automática.
 
@@ -146,11 +154,7 @@ Ejercicios
   continuación las tasas de sensibilidad (*recall*) y precisión para el conjunto de la base de datos (sólo
   el resumen).
 
-  /home/alejandro/Desktop/CFIS/4A/PAV/practicas/PAV/p2/db.v4/2018-19q1/pav_4385.lab: 96.981%
- 	 **************** Summary ****************
-	Recall V:368.89/382.74 96.38%   Precision V:368.89/402.50 91.65%   F-score V (2)  : 95.40%
-	Recall S:237.40/271.01 87.60%   Precision S:237.40/251.25 94.49%   F-score S (1/2): 93.02%
-	===> TOTAL: 94.203%
+ ![Alt text](./f-score.png?raw=true "Optional Title")
 
 
 
@@ -163,9 +167,9 @@ Ejercicios
   la que se vea con claridad la señal antes y después de la cancelación (puede que `wavesurfer` no sea la
   mejor opción para esto, ya que no es capaz de visualizar varias señales al mismo tiempo).
   
-  Hecho·
-  Adjuntada en el zip como WaveSurfer_Graphs.pdf
-  image.png
+
+
+  ![Alt text](./WaveSurfer_Graphs-1.png?raw=true "Optional Title")
 
  
 
@@ -176,24 +180,8 @@ Ejercicios
 
 Hecho. El Help funcionaría: 
 
-bin/vad --help
-VAD - Voice Activity Detector
 
-Usage:
-   vad [options] -i <input-wav> -o <output-vad> [-w <output-wav>]
-   vad (-h | --help)
-   vad --version
-
-Options:
-   -i FILE, --input-wav=FILE   WAVE file for voice activity detection
-   -o FILE, --output-vad=FILE  Label file with the result of VAD
-   -1, --alfa1 REAL    Value of parameter alfa1
-   -2, --alfa2 REAL    Value of parameter alfa2
-   -w FILE, --output-wav=FILE  WAVE file with silences cleared
-   -v, --verbose  Show debug information
-   -h, --help     Show this screen
-   --version      Show the version of the project
-
+![Alt text](./help.png?raw=true "Optional Title")
 
 ### Contribuciones adicionales y/o comentarios acerca de la práctica
 
