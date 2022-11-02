@@ -107,7 +107,7 @@ Ejercicios
 
 	Tenemos la siguiente gráfica: 
 
-	![Alt text](./wave.png?raw=true "Optional Title")
+	![Alt text](img/wave.png?raw=true "Optional Title")
 	
 
     Nuestro etiquetado manual es :
@@ -161,12 +161,12 @@ Ejercicios
 
 	Aprovechando que hemos hecho el archivo wav de salida, adjuntamos la gráfica de dos señales de voz de la base de datos (Una original y otra con el vad) y se verá de forma más clara:
 	
-    ![Alt text](./WaveSurfer_Graphs-1.png?raw=true "Optional Title")
+    ![Alt text](img/WaveSurfer_Graphs-1.png?raw=true "Optional Title")
 	
 	
 	Se ha realizado con el fichero de audio pav_4305.wav. Se puede consultar el .vad en prueba4305.vad y el fichero de audio de salida en pruebapp2.wav. El contenido del archivo .vad en comparacion con el teórico es:
 
-	![Alt text](./comp.png?raw=true "Optional Title")
+	![Alt text](img/comp.png?raw=true "Optional Title")
 
 - Explique, si existen. las discrepancias entre el etiquetado manual y la detección automática.
 
@@ -178,7 +178,7 @@ Ejercicios
   continuación las tasas de sensibilidad (*recall*) y precisión para el conjunto de la base de datos (sólo
   el resumen).
 
- ![Alt text](./f-score.png?raw=true "Optional Title")
+ ![Alt text](img/f-score.png?raw=true "Optional Title")
 
 
 
@@ -193,7 +193,7 @@ Ejercicios
   
 
 
-  ![Alt text](./WaveSurfer_Graphs-1.png?raw=true "Optional Title")
+  ![Alt text](img/WaveSurfer_Graphs-1.png?raw=true "Optional Title")
 
 	Para poder llevar a cabo este ejercicio de ampliación, se ha tenido que seguir un procedimiento (se puede ver más en profundidad desde el código) donde al leer el buffer, este se escribía en el archivo .wav de salida. de forma que:
 	```c
@@ -231,7 +231,7 @@ Ejercicios
 Hecho. El Help funcionaría: 
 
 
-![Alt text](./help.png?raw=true "Optional Title")
+![Alt text](img/help.png?raw=true "Optional Title")
 
 ### Contribuciones adicionales y/o comentarios acerca de la práctica
 
