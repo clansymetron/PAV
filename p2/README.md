@@ -106,7 +106,7 @@ Ejercicios
   potencia y la tasa de cruces por cero, junto con el etiquetado manual de los segmentos.
 
 	Tenemos la siguiente gráfica: 
-	
+
 	![Alt text](./wave.png?raw=true "Optional Title")
 	
 
@@ -122,7 +122,7 @@ Ejercicios
 	| 6.0075000 | 7.5525000 | V |
 	| 7.5525000 | 9.0375000 | S |	
 
-	Si lo comparamos con el resultado obtenido, vemos que nuestro sistema (Audio2.vad) no funciona especialmente bien con este archivo. Se debe a que la voz suena con muy poca potencia en relación al silencio. Sin embargo, como hemos optimizado el F-Score total , no es tan relevante. Puesto que en los otros casos nos da muy buen resultado: 94,201 %
+	Si lo comparamos con el resultado obtenido (solo dos tramos de S), vemos que nuestro sistema (Audio2.vad) no funciona especialmente bien con este archivo. Se debe a que la voz suena con muy poca potencia en relación al silencio. Sin embargo, como hemos optimizado el F-Score total , no es tan relevante. Puesto que en los otros casos nos da muy buen resultado: 94,201 %
 
 - A la vista de la gráfica, indique qué valores considera adecuados para las magnitudes siguientes:
 
