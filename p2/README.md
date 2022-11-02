@@ -165,6 +165,7 @@ Ejercicios
   
   Hecho·
   Adjuntada en el zip como WaveSurfer_Graphs.pdf
+  image.png
 
  
 
