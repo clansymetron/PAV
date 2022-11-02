@@ -105,7 +105,7 @@ Ejercicios
   continuación, una captura de `wavesurfer` en la que se vea con claridad la señal temporal, el contorno de
   potencia y la tasa de cruces por cero, junto con el etiquetado manual de los segmentos.
 
-		Tenemos la siguiente gráfica: 
+	Tenemos la siguiente gráfica: 
 	![Alt text](./wave.png?raw=true "Optional Title")
 	
 
@@ -120,55 +120,55 @@ Ejercicios
 	| 6.0075000 | 7.5525000 | V |
 	| 7.5525000 | 9.0375000 | S |	
 
-		Si lo comparamos con el resultado obtenido, vemos que nuestro sistema (Audio2.vad) no funciona especialmente bien con este archivo. Se debe a que la voz suena con muy poca potencia en relación al silencio. Sin embargo, como hemos optimizado el F-Score total , no es tan relevante. Puesto que en los otros casos nos da muy buen resultado: 94,201 %
+	Si lo comparamos con el resultado obtenido, vemos que nuestro sistema (Audio2.vad) no funciona especialmente bien con este archivo. Se debe a que la voz suena con muy poca potencia en relación al silencio. Sin embargo, como hemos optimizado el F-Score total , no es tan relevante. Puesto que en los otros casos nos da muy buen resultado: 94,201 %
 
 - A la vista de la gráfica, indique qué valores considera adecuados para las magnitudes siguientes:
 
 	* Incremento del nivel potencia en dB, respecto al nivel correspondiente al silencio inicial, para
 	  estar seguros de que un segmento de señal se corresponde con voz.
 	  
-	  		Si hay un incremento de 27dB podemos decir que empieza un segemnto de voz.
+		Si hay un incremento de 27dB podemos decir que empieza un segemnto de voz.
 
 	* Duración mínima razonable de los segmentos de voz y silencio.
 		
-			Duración mínima del silencio podemos decir que es 0,7s y de voz 1,2s. (Muy lejos de lo que observamos con otros audios, por lo que en el programa utilizamos otros parámetros) Al ir ajustando los parámetros observamos que finalmente los tiempos a considerar son los siguientes:
+		Duración mínima del silencio podemos decir que es 0,7s y de voz 1,2s. (Muy lejos de lo que observamos con otros audios, por lo que en el programa utilizamos otros parámetros) Al ir ajustando los parámetros observamos que finalmente los tiempos a considerar son los siguientes:
 
 		```c
 		if(time_passed>0.266 || (time_passed>0.204 && f.p<vad_data->umbral1)){...} //Caso de MYB_SILENCE A SILENCE
 
 		if((time_passed>0.05 && f.p>vad_data->alpha2) || time_passed >0.08){...} //caso de MYB_VOICE A VOICE
 		```
-			Como se observa  (y comentaremos más a detalle adelante en adaptaciones del algoritmo) usamos distintos tiempos. En el caso de voz, consideramos que 0.08 es un tiempo considerable (nos optimiza la F-Score) y 0.05 en caso de que supere el segundo umbral (y más restrictivo). Lo mismo con Silencio pero con números mayores, pues es donde somos más restrictivos.
+		Como se observa  (y comentaremos más a detalle adelante en adaptaciones del algoritmo) usamos distintos tiempos. En el caso de voz, consideramos que 0.08 es un tiempo considerable (nos optimiza la F-Score) y 0.05 en caso de que supere el segundo umbral (y más restrictivo). Lo mismo con Silencio pero con números mayores, pues es donde somos más restrictivos.
 
 
 	* ¿Es capaz de sacar alguna conclusión a partir de la evolución de la tasa de cruces por cero?
 		
-			La tasa de cruces por cero nos puede ayudar a diferenciar cuando se trata de silencio o de una consonante fricativa, por ejemplo. Esto es, ya que estas tienen poca potencia y podrían llegar a considerarse silencio. Sin embargo, en nuestro algoritmo no lo hemos usado pues no ayudaba a mejorar las estadísticas.
+		La tasa de cruces por cero nos puede ayudar a diferenciar cuando se trata de silencio o de una consonante fricativa, por ejemplo. Esto es, ya que estas tienen poca potencia y podrían llegar a considerarse silencio. Sin embargo, en nuestro algoritmo no lo hemos usado pues no ayudaba a mejorar las estadísticas.
 
 ### Desarrollo del detector de actividad vocal
 
 - Complete el código de los ficheros de la práctica para implementar un detector de actividad vocal en
   tiempo real tan exacto como sea posible. Tome como objetivo la maximización de la puntuación-F `TOTAL`.
 	
-		Tras completar el código y optimizar tanto los valores de los umbrales como de las codiciones de transición (Mediante tiempo y potencia) obtenemos una F-Score de
-		> TOTAL: 94.203%
+	Tras completar el código y optimizar tanto los valores de los umbrales como de las codiciones de transición (Mediante tiempo y potencia) obtenemos una F-Score de
+	> TOTAL: 94.203%
 
 - Inserte una gráfica en la que se vea con claridad la señal temporal, el etiquetado manual y la detección
   automática conseguida para el fichero grabado al efecto. 
 
 
-		Aprovechando que hemos hecho el archivo wav de salida, adjuntamos la gráfica de dos señales de voz de la base de datos (Una original y otra con el vad) y se verá de forma más clara:
+	Aprovechando que hemos hecho el archivo wav de salida, adjuntamos la gráfica de dos señales de voz de la base de datos (Una original y otra con el vad) y se verá de forma más clara:
 	
     ![Alt text](./WaveSurfer_Graphs-1.png?raw=true "Optional Title")
 	
 	
-	 	Se ha realizado con el fichero de audio pav_4305.wav. Se puede consultar el .vad en prueba4305.vad y el fichero de audio de salida en pruebapp2.wav. El contenido del archivo .vad en comparacion con el teórico es:
+	Se ha realizado con el fichero de audio pav_4305.wav. Se puede consultar el .vad en prueba4305.vad y el fichero de audio de salida en pruebapp2.wav. El contenido del archivo .vad en comparacion con el teórico es:
 
-	 ![Alt text](./comp.png?raw=true "Optional Title")
+	![Alt text](./comp.png?raw=true "Optional Title")
 
 - Explique, si existen. las discrepancias entre el etiquetado manual y la detección automática.
 
-		Analizando los resultados de Recall y Precisión vemos que la peor es el recall del Silencio con 87,6% y el mejor el recall de la voz con un 96.38%. Esto indica que hemos considerado tramas de silencio como voz, maximizando la detección de voz para no perder información. Consideramos que caracterizar tramas de voz como silencio es más perjudicial que considerar tramas de silencio como voz, ya que la información se preserva.
+	Analizando los resultados de Recall y Precisión vemos que la peor es el recall del Silencio con 87,6% y el mejor el recall de la voz con un 96.38%. Esto indica que hemos considerado tramas de silencio como voz, maximizando la detección de voz para no perder información. Consideramos que caracterizar tramas de voz como silencio es más perjudicial que considerar tramas de silencio como voz, ya que la información se preserva.
 
 
 
@@ -193,14 +193,14 @@ Ejercicios
 
   ![Alt text](./WaveSurfer_Graphs-1.png?raw=true "Optional Title")
 
-		Para poder llevar a cabo este ejercicio de ampliación, se ha tenido que seguir un procedimiento (se puede ver más en profundidad desde el código) donde al leer el buffer, este se escribía en el archivo .wav de salida. de forma que:
+	Para poder llevar a cabo este ejercicio de ampliación, se ha tenido que seguir un procedimiento (se puede ver más en profundidad desde el código) donde al leer el buffer, este se escribía en el archivo .wav de salida. de forma que:
 	```c
 	if (sndfile_out != 0) {
 		sf_write_float(sndfile_out, buffer, frame_size); //We write into the output file the samples of the buffer
 		}
 
 	```
-		Una vez pasado los valores de la señal original al de salida, es necesario saber cuándo se debe poner a 0 las X muestras correspondientes. Para ello ay disponíamos de los tiempos defined_t y last_t que definen las tramas en un mismo estado definido (restadas). Por ello, al ver que estamos en un estado de silencio confirmado, ponemos a 0 todas estas tramas. Es interesante comentar que la función write_float de la librería sndfile.h admite un máximo valor en el t_count, por lo que ha sido necesario dividir la escritura de 0 en escrituras más pequeñas de valor 161*frame_size. Aproximadamente 25.000.
+	Una vez pasado los valores de la señal original al de salida, es necesario saber cuándo se debe poner a 0 las X muestras correspondientes. Para ello ay disponíamos de los tiempos defined_t y last_t que definen las tramas en un mismo estado definido (restadas). Por ello, al ver que estamos en un estado de silencio confirmado, ponemos a 0 todas estas tramas. Es interesante comentar que la función write_float de la librería sndfile.h admite un máximo valor en el t_count, por lo que ha sido necesario dividir la escritura de 0 en escrituras más pequeñas de valor 161*frame_size. Aproximadamente 25.000.
 	```c
 	if (sndfile_out != 0 && defined_state == ST_SILENCE) { //if there is output file and the last defined state is Silence (which means we have just switch to voice) we put to 0 all the samples of silence.
               sf_seek(sndfile_out, defined_t* frame_size, SEEK_SET); //Point to the position of the file where the Silence starts (defined_t * frame_size)
@@ -236,12 +236,12 @@ Hecho. El Help funcionaría:
 - Indique a continuación si ha realizado algún tipo de aportación suplementaria (algoritmos de detección o 
   parámetros alternativos, etc.).
 
-		Hemos usado dos umbrales de detección para poder afinar más con la detección. Además, hemos sido más restrictivos a la hora de pasar de maybeSilence a silence que de maybeVoice a voice. Esto para maximizar la detección de voz, pues no puede perderse información. Para ello hemos usado tanto los umbrales como el tiempo en los estados (calculado a partir del número de tramas). 
-		 También hemos tenido en cuenta, a la hora de calcular los umbrales, la potencia logarítmica de las primeras 15 tramas. Creemos que esta es la medida más fiable a la hora de contemplar el ruido.
+	Hemos usado dos umbrales de detección para poder afinar más con la detección. Además, hemos sido más restrictivos a la hora de pasar de maybeSilence a silence que de maybeVoice a voice. Esto para maximizar la detección de voz, pues no puede perderse información. Para ello hemos usado tanto los umbrales como el tiempo en los estados (calculado a partir del número de tramas). 
+	También hemos tenido en cuenta, a la hora de calcular los umbrales, la potencia logarítmica de las primeras 15 tramas. Creemos que esta es la medida más fiable a la hora de contemplar el ruido.
 	$P_{dB} = 10 \log_{10} (\dfrac{1}{Nint} · \sum_{n = 0}^{Nint-1 }10^{{Pdb[i]}/{10}}[{n}] )$;
 
 
-	     Para ello
+	Para ello
 	```c
 	if(nint==15){
 		vad_data->umbral1 = 10*log10((vad_data->umbral1)/nint) + vad_data->alpha1;
@@ -257,7 +257,7 @@ Hecho. El Help funcionaría:
 		nint++;
 		}
 	```
-		En cuanto, al uso de estados de transición y tiempos hemos decidido lo siguiente:
+	En cuanto, al uso de estados de transición y tiempos hemos decidido lo siguiente:
 
 	```c
 		case ST_SILENCE:
@@ -307,14 +307,14 @@ Hecho. El Help funcionaría:
 			}
 	```
 
-		Como se observa, en el caso de voz, consideramos que 0.08 es un tiempo considerable (nos optimiza la F-Score) y 0.05 en caso de que supere el segundo umbral (y más restrictivo por lo que el tiempo puede ser menor). Lo mismo con Silencio pero con números mayores, pues es donde somos más restrictivos. Para contar el tiempo que lleva se utiliza una variable de la propia estrucutra vad_data wue hemos denominado maybe_count;
+	Como se observa, en el caso de voz, consideramos que 0.08 es un tiempo considerable (nos optimiza la F-Score) y 0.05 en caso de que supere el segundo umbral (y más restrictivo por lo que el tiempo puede ser menor). Lo mismo con Silencio pero con números mayores, pues es donde somos más restrictivos. Para contar el tiempo que lleva se utiliza una variable de la propia estrucutra vad_data wue hemos denominado maybe_count;
 
 	```c
 		float time_passed = FRAME_TIME * 1e-3 * vad_data->maybe_count;
 
 	```
 
-		Es decir, el algoritmo primero mira el umbral menos restrictivo (En caso de los MAYBE) y si lo cumple ocurren dos cosas:
+	Es decir, el algoritmo primero mira el umbral menos restrictivo (En caso de los MAYBE) y si lo cumple ocurren dos cosas:
 				
 	>  1.	Si no supera el umbral más restrictivo, tiene en cuenta un tiempo de transición mayor. Puesto que se si se encuentra entre estos dos umbrales un largo tiempo debe cambiar.
 	
@@ -322,7 +322,7 @@ Hecho. El Help funcionaría:
 
 
 
-		Cabe comentar que se debe hacer un tratamiento especialm para la última trama. Si el estado de esta última está definido (SILENCE o VOICE) el tratamientto es el mimso que normal (Teniendo en cuenta los n_read). Sin embargo, si está en un estado indecidido, se debe establecer cuál es en base al úiltimo::
+	Cabe comentar que se debe hacer un tratamiento especialm para la última trama. Si el estado de esta última está definido (SILENCE o VOICE) el tratamientto es el mimso que normal (Teniendo en cuenta los n_read). Sin embargo, si está en un estado indecidido, se debe establecer cuál es en base al úiltimo::
 
 	```c
 	state = vad_close(vad_data);
