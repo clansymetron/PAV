@@ -24,6 +24,7 @@ float compute_zcr(const float *x, unsigned int N, float fm) {
    	if((x[i]>0 && x[i-1]<0) || (x[i]<0 && x[i-1]>0) ) //falta considerar caso 0
    	    res++;
    }
+   
    return res*fm/(2*(N-1));
    
 }

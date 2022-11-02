@@ -93,6 +93,7 @@ VAD_STATE vad(VAD_DATA *vad_data, float *x) {
    */
 
   Features f = compute_features(x, vad_data->frame_length);
+  // fprintf(stdout, "%f \n ",f.zcr);
   vad_data->last_feature = f.p; /* save feature, in case you want to show */
   float time_passed = FRAME_TIME * 1e-3 * vad_data->maybe_count; /*Time en s. that we are in the state MaybeSilence(MYBS) or MaybeVoice(MYBV) */
 
